@@ -1,0 +1,7 @@
+MsaViewer is a graphical interface for multiple sequences alignments.
+
+It gives different statistical informations about a multiple sequence alignment like column conservation score and column amino acid counts.
+
+The features will evolve with the project.
+
+This software is first developed for Macosx plateforme but we will propose a windows version when the first release will be available
