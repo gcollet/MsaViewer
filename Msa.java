@@ -1,10 +1,3 @@
-//
-//  Msa.java
-//  MsaView
-//
-//  Created by COLLET Guillaume on 09/03/11.
-//  Copyright 2011 Bill Psyko Systems. All rights reserved.
-//
 
 import java.util.*;
 import java.io.*;

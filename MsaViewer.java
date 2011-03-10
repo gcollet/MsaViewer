@@ -1,29 +1,45 @@
+//
+//  MsaView.java
+//  MsaView
+//
+//  Created by COLLET Guillaume on 10/03/11.
+//  Copyright (c) 2011 Bill Psyko Systems. All rights reserved.
+//
+//  A simple signed Java applet
+//
+
 import java.awt.*;
+import java.applet.*;
 import javax.swing.*;
 
-public class MsaViewer extends JApplet {
+
+public class MsaView extends JApplet {
 	
-	private Msa msaObj;
 	private JScrollPane msaPanel;
+	private JTextField posTextField;
 	private JButton valider;
 	private JLabel titre;
 	private JTextArea msaSeq;
-	private Panel headerLine;
-	
+	private Panel headerLine, graphLine;
+	private Histo histograph;
 	public void init(){
 		setBackground(Color.WHITE);
 		
 		// Création des éléments d'interface
-		String fname  = getParameter("file");
+		String fname  = getCodeBase() + "/" + getParameter("file");
 		
 		valider       = new JButton("Valider");
 		titre         = new JLabel("MsaViewer");
 		headerLine    = new Panel();
+		graphLine    = new Panel();
+		posTextField = new JTextField("Positions separated by comma");
+		
 		headerLine.setBackground(Color.black);
+		graphLine.setBackground(Color.black);
 		
 		msaSeq = new JTextArea("     1   5   10    15    20    25    30    35    40    45    50    55    60    65    70    75    80    85    90    95   100   105   110   115   120   125   130   135   140   145   150   \n");
 		msaSeq.setEditable(false);
-		msaSeq.setFont(new Font("Courier New", Font.PLAIN, 12));
+		msaSeq.setFont(new Font("Courier New", Font.PLAIN, 14));
 		msaSeq.append("     |   |    |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |   \n");
 		msaSeq.append("   1 MAHHHHHHMMKEETLNSDNSSAEVSVESPSFSFNCAHFIAYNGFRETLHGHNYNVSLKVRGYVRDDGYVIDFSILKEKVKKVCNKLDHHFILPIYSDVLKFENVKNNIKIICEDNSEYSFPERDCIKLPIKHSSTEEIGQYILNQLIEEXDVSLLKSRHIHYIEISVSESPTQKAIVHKYI\n");
 		msaSeq.append("   2 MAHHHHHHMMKEETLNSDNSSAEVSVESPSFSFNCAHFIAYNGFRETLHGHNYNVSLKVRGYVRDDGYVIDFSILKEKVKKVCNKLDHHFILPIYSDVLKFENVKNNIKIICEDNSEYSFPERDCIKLPIKHSSTEEIGQYILNQLIEEXDVSLLKSRHIHYIEISVSESPTQKAIVHKYI\n");
@@ -90,7 +106,7 @@ public class MsaViewer extends JApplet {
 		constraints.gridwidth  = 1;
 		constraints.gridheight = 1;
 		constraints.fill = GridBagConstraints.BOTH;
-		constraints.anchor = GridBagConstraints.NORTH;
+		constraints.anchor = GridBagConstraints.WEST;
 		constraints.weightx = 100;
 		constraints.weighty = 0;
 		constraints.insets = new Insets(0,0,0,0);
@@ -98,7 +114,7 @@ public class MsaViewer extends JApplet {
 		constraints.ipady = 0;
 		mainGrid.setConstraints(graphPanel, constraints);
 		getContentPane().add(graphPanel);
-
+		
 		// Placement du msaPanel
 		constraints.gridx = 0;
 		constraints.gridy = 2;
@@ -113,7 +129,7 @@ public class MsaViewer extends JApplet {
 		constraints.ipady = 0;
 		mainGrid.setConstraints(msaPanel, constraints);
 		getContentPane().add(msaPanel);
-
+		
 		// Placement du Titre dans le panel headerPanel
 		constraints.gridx = 0;
 		constraints.gridy = 0;
@@ -122,20 +138,49 @@ public class MsaViewer extends JApplet {
 		constraints.fill = GridBagConstraints.NONE;
 		constraints.anchor = GridBagConstraints.SOUTHWEST;
 		constraints.weightx = 0;
-		constraints.weighty = 0;
-		constraints.insets = new Insets(0,0,0,0);
+		constraints.weighty = 99;
+		constraints.insets = new Insets(3,5,3,3);
 		constraints.ipadx = 0;
 		constraints.ipady = 0;
 		headerGrid.setConstraints(titre, constraints);
 		headerPanel.add(titre);
-		
-		// Placement du bouton valider dans le headerPanel
+		// Placement du headeLine dans le headerPanel
+		constraints.gridx = 0;
+		constraints.gridy = 1;
+		constraints.gridwidth  = 2;
+		constraints.gridheight = 1;
+		constraints.fill = GridBagConstraints.BOTH;
+		constraints.anchor = GridBagConstraints.SOUTH;
+		constraints.weightx = 100;
+		constraints.weighty = 1;
+		constraints.insets = new Insets(0,0,0,0);
+		constraints.ipadx = 0;
+		constraints.ipady = 2;
+		headerGrid.setConstraints(headerLine, constraints);
+		headerPanel.add(headerLine);
+		//Placement du posTextField dans le graphPanel
+		posTextField.setMinimumSize(new Dimension(200,30));
 		constraints.gridx = 0;
 		constraints.gridy = 0;
 		constraints.gridwidth  = 1;
 		constraints.gridheight = 1;
 		constraints.fill = GridBagConstraints.NONE;
-		constraints.anchor = GridBagConstraints.NORTHEAST;
+		constraints.anchor = GridBagConstraints.NORTHWEST;
+		constraints.weightx = 0;
+		constraints.weighty = 0;
+		constraints.insets = new Insets(0,0,0,0);
+		constraints.ipadx = 0;
+		constraints.ipady = 0;
+		graphGrid.setConstraints(posTextField, constraints);
+	  graphPanel.add(posTextField);
+		
+		// Placement du bouton valider dans le graphPanel
+		constraints.gridx = 1;
+		constraints.gridy = 0;
+		constraints.gridwidth  = 1;
+		constraints.gridheight = 1;
+		constraints.fill = GridBagConstraints.NONE;
+		constraints.anchor = GridBagConstraints.NORTHWEST;
 		constraints.weightx = 0;
 		constraints.weighty = 0;
 		constraints.insets = new Insets(0,0,0,0);
@@ -143,7 +188,6 @@ public class MsaViewer extends JApplet {
 		constraints.ipady = 0;
 		graphGrid.setConstraints(valider, constraints);
 	  graphPanel.add(valider);
-		
 		// Placement du headeLine dans le headerPanel
 		constraints.gridx = 0;
 		constraints.gridy = 1;
@@ -156,7 +200,8 @@ public class MsaViewer extends JApplet {
 		constraints.insets = new Insets(0,0,0,0);
 		constraints.ipadx = 0;
 		constraints.ipady = 0;
-		headerGrid.setConstraints(headerLine, constraints);
-		headerPanel.add(headerLine);
+		graphGrid.setConstraints(graphLine, constraints);
+		graphPanel.add(graphLine);
+	
 	}
-} 
+}
