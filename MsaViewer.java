@@ -22,9 +22,11 @@ public class MsaView extends JApplet {
 	private JTextArea msaSeq;
 	private Panel headerLine, graphLine;
 	private Histo histograph;
+	
 	public void init(){
 		setBackground(Color.WHITE);
-		
+		setMinimumSize(new Dimension(800,600));
+		setPreferredSize(new Dimension(800,600));
 		// Création des éléments d'interface
 		String fname  = getCodeBase() + "/" + getParameter("file");
 		
